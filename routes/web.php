@@ -17,7 +17,14 @@ use Illuminate\Support\Facades\Route;
 //19072021
 Auth::routes();
 
-Route::get('/', 'Frontend\PageController@home');
 Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm');
 Route::post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.login');
 Route::post('/admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+
+Route::middleware('auth')->namespace('Frontend')->group(function () {
+    Route::get('/', 'PageController@home')->name('home');
+    Route::get('/profile', 'PageController@profile')->name('profile');
+    Route::get('/update-password', 'PageController@updatePassword')->name('update-password');
+    Route::post('/update-password', 'PageController@updatePasswordStore')->name('update-password.store');
+});
+

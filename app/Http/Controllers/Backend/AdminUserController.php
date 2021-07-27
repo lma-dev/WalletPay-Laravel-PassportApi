@@ -123,7 +123,7 @@ class AdminUserController extends Controller
         $admin_user->email = $request->email;
         $admin_user->password = $request->password ? Hash::make($request->password) : $admin_user->password;
         $admin_user->phone = $request->phone;
-        $admin_user->save();
+        $admin_user->update();
 
         return redirect()->route('admin.admin-user.index')->with('update','Successfully Updated');
     }

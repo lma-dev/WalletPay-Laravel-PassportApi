@@ -31,6 +31,7 @@
                         <th>User Agent</th>
                         <th>Create at</th>
                         <th>Update at</th>
+                        <th>Login Time</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -85,6 +86,12 @@ $(document).ready(function() {
             {
                 data: "updated_at",
                 name: "updated_at",
+
+            },
+
+            {
+                data: "login_at",
+                name: "login_at",
 
             },
 

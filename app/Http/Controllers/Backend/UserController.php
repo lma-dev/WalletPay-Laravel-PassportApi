@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\User;
+use App\Wallet;
 use Carbon\Carbon;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
+use App\Helpers\UUIDGenerate;
+use App\Http\Requests\StoreUser;
 use Yajra\Datatables\Datatables;
+use App\Http\Requests\UpdateUser;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\StoreUser;
-use App\Http\Requests\UpdateUser;
-
 
 class UserController extends Controller
 {
@@ -86,15 +88,31 @@ class UserController extends Controller
      */
     public function store(StoreUser $request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->phone = $request->phone;
-        $user->save();
+        DB::beginTransaction();
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->phone = $request->phone;
+            $user->save();
 
-        return redirect()->route('admin.user.index')->with('create','Successfully Created');
+             Wallet::firstOrCreate(
+                [
+                    'user_id' =>  $user->id
+                ],
+                [
+                    'account_number' => UUIDGenerate::accountNumber(),
+                    'amount'    => 0 ,
+                ]
+            );
+            DB::commit();
+            return redirect()->route('admin.user.index')->with('create','Successfully Created');
 
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withError(['fail' => 'Something wrong.' .$e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -118,14 +136,31 @@ class UserController extends Controller
      */
     public function update(UpdateUser $request, $id)
     {
+        DB::beginTransaction();
+        try {
         $user = User:: findorfail($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password ? Hash::make($request->password) : $user->password;
         $user->phone = $request->phone;
-        $user->save();
+        $user->update();
 
-        return redirect()->route('admin.user.index')->with('update','Successfully Updated');
+        Wallet::firstOrCreate(
+            [
+                'user_id' =>  $user->id
+            ],
+            [
+                'account_number' => UUIDGenerate::accountNumber(),
+                'amount'    => 0 ,
+            ]
+        );
+            DB::commit();
+            return redirect()->route('admin.user.index')->with('update','Successfully Updated');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withError(['fail' => 'Something wrong.' .$e->getMessage()])->withInput();
+        }
     }
 
     /**

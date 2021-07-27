@@ -1,0 +1,179 @@
+/*
+
+theme color : #5842E3;
+border-radius: 10px;
+box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
+*/
+
+body{
+    background: #EDEDF5;
+    font-size: 15px;
+    font-family: 'Roboto Slab', serif;
+}
+
+.card{
+    border-radius: 10px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
+    border: none;
+}
+.btn{
+    padding: 10px 25px;
+}
+
+.btn-theme{
+    background-color: #5842E3;
+    color: white;
+}
+
+.btn-theme:hover{
+    background-color: #5842E3;
+    color: white;
+}
+
+/* ------------------- Sweet Alert2 ------------------------*/
+.swal2-popup{
+    border-radius: 10px !important;
+}
+
+.swal2-title{
+   font-size: 18px !important;
+}
+
+.swal2-styled{
+  border-radius: 10px !important;
+  padding: 10px 25px !important;
+ }
+
+ .swal2-styled.swal2-confirm {
+    background-color: #5842E3 !important;
+}
+
+a{
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover{
+    text-decoration: none;
+    color: #5842E3;
+}
+/* -------------------Auth Form------------------- */
+.auth-form{
+    box-shadow:0 3px 8px rgba(0,0,0,0.15);
+    border:none;
+    border-radius: 10px;
+}
+
+.auth-form a{
+color:black;
+text-decoration: none;
+}
+
+.auth-form a:hover{
+    color: #5842E3;
+    }
+
+/* ------------------- Header Menu ------------------------*/
+.header-menu{
+    background: #fff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    z-index: 999;
+}
+.header-menu a{
+    text-decoration: none;
+    color: #333;
+}
+
+.header-menu i{
+    font-size: 20px;
+}
+
+.header-menu h3{
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.header-menu a:hover i{
+    color: #5842E3;
+    transition: .3s;
+}
+
+.header-menu a:hover p{
+    color: #5842E3;
+    transition: .3s;
+}
+
+
+/* ------------------- Bottom Menu ------------------------*/
+.bottom-menu{
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.bottom-menu a{
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+.bottom-menu i{
+    margin-top: 12px;
+    font-size: 20px;
+}
+
+.bottom-menu p{
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.bottom-menu a:hover i{
+    color: #5842E3;
+    transition: .3s;
+}
+
+.bottom-menu a:hover p{
+    color: #5842E3;
+    transition: .3s;
+}
+
+/* ------------------- Main Content ------------------------*/
+.content{
+    margin-top: 75px;
+    margin-bottom: 75px;
+}
+
+/* -------------------Account------------------- */
+
+.account .profile{
+    text-align: center;
+}
+.account .profile img{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    background: rgb(255, 255, 255);
+}
+
+.account .card{
+    border-radius: 10px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
+}
+
+/* ------------------- Update Password ------------------------*/
+.update_password img{
+    width:280px;
+}
+
+/* ------------------- Error Message ------------------------*/
+.invalid-feedback{
+    display:block;
+}

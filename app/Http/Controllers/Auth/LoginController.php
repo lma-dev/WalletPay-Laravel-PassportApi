@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
 
 
 class LoginController extends Controller
@@ -48,5 +51,28 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('auth.login');
+    }
+    protected function authenticated(Request $request, $user)
+    {
+       $user->ip = $request->ip();
+       $user->user_agent = $request->server('HTTP_USER_AGENT');
+       $user->login_at = date('Y-m-d H:i:s');
+       $user->update();
+
+       return redirect($this->redirectTo);
+    }
+
+    public function logout(Request $request){
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if($response = $this->loggedOut($request)){
+            return $response;
+
+        }
+        return $request->wantsJson()
+        ? new JsonResponse([], 204)
+        :redirect('/');
     }
 }
