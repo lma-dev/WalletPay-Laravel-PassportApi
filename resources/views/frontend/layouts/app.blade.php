@@ -8,7 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title')</title>
-
+    <!-- Dae Range Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -27,6 +28,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
 
+
+
       @yield('extra_css')
 
 </head>
@@ -34,22 +37,20 @@
     <div id="app">
 
         <div class="header-menu">
-            <div class="row justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="col-md-8" >
                     <div class="row">
-                        <div class="col-4 text-center">
+                        <div class="col-2 text-center">
                             @if(!request()->is('/'))
                             <a href="" class="back-btn">
                                 <i class="fas fa-angle-left"></i>
                              </a>
                              @endif
                         </div>
-                        <div class="col-4 text-center">
-                            <a href="">
+                        <div class="col-8 text-center">
                                 <h3>@yield('title')</h3>
-                             </a>
                         </div>
-                        <div class="col-4 text-center">
+                        <div class="col-2 text-center">
                             <a href="">
                                 <i class="fas fa-bell"></i>
                             </a>
@@ -60,7 +61,7 @@
         </div>
 
         <div class="content" >
-            <div class="row justify-content-center" >
+            <div class="d-flex justify-content-center" >
                <div class="col-md-8">
                     @yield('content')
                </div>
@@ -68,25 +69,36 @@
         </div>
 
         <div class="bottom-menu">
-            <div class="row justify-content-center">
+            <a href="" class="scan-tab">
+                <div class="inside">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+            </a>
+            <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                     <div class="row">
-                        <div class="col-4 text-center">
+                        <div class="col-3 text-center">
                             <a href="{{route('home')}}">
                                 <i class="fas fa-home"></i>
                                 <p>Home</p>
                              </a>
                         </div>
-                        <div class="col-4 text-center">
-                            <a href="">
-                                <i class="fas fa-qrcode"></i>
-                                <p>Scan</p>
+                        <div class="col-3 text-center">
+                            <a href="{{route('wallet')}}">
+                                <i class="fas fa-wallet"></i>
+                                <p>Wallet</p>
                              </a>
                         </div>
-                        <div class="col-md-4 text-center">
+                        <div class="col-3 text-center">
+                            <a href="{{url('transaction') }}">
+                                <i class="fas fa-exchange-alt"></i>
+                                <p>Transaction</p>
+                             </a>
+                        </div>
+                        <div class="col-3 text-center">
                             <a href="{{route('profile')}}">
                                 <i class="fas fa-user"></i>
-                                <p>Account</p>
+                                <p>Profile</p>
                             </a>
                         </div>
                     </div>
@@ -99,9 +111,16 @@
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
       <!-- Sweet Alert2 -->
       <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="{{asset('frontend/js/jscroll.min.js')}}"></script>
+
+
+      <!-- Date Picker -->
+      <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
       $(document).ready(function(){

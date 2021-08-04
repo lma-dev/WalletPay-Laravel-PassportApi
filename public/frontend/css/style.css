@@ -125,7 +125,7 @@ text-decoration: none;
 
 .bottom-menu i{
     margin-top: 12px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .bottom-menu p{
@@ -151,29 +151,139 @@ text-decoration: none;
 
 /* -------------------Account------------------- */
 
-.account .profile{
-    text-align: center;
-}
-.account .profile img{
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    background: rgb(255, 255, 255);
-}
-
 .account .card{
     border-radius: 10px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
 }
 
+
+ .profile{
+    text-align: center;
+}
+ .profile img{
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+
 /* ------------------- Update Password ------------------------*/
 .update_password img{
-    width:280px;
+    width:220px;
 }
 
 /* ------------------- Error Message ------------------------*/
 .invalid-feedback{
     display:block;
+}
+
+/* ------------------- Scan Tab ------------------------*/
+.scan-tab{
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    position: fixed;
+    background: #EDEDF5;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.scan-tab .inside{
+    width: 52px;
+    height: 52px;
+    background: #fff;
+    border-radius: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation:glow 5s infinite;
+
+}
+
+.scan-tab .inside i{
+    margin: 0;
+}
+
+@keyframes glow{
+    0%{
+        box-shadow: 0 0 -10px #5842E3;
+    }
+
+    20%{
+        box-shadow: 0 0 5px #5842E3;
+    }
+
+    40%{
+        box-shadow: 0 0 15px #5842E3;
+    }
+
+    60%{
+        box-shadow: 0 0 5px #5842E3;
+    }
+
+    100%{
+        box-shadow: 0 0 -10px #5842E3;
+    }
+}
+
+
+/* ------------------- Wallet ------------------------*/
+.wallet{
+
+}
+
+.wallet .my-card{
+    background-color: #5842E3;
+    color: white;
+}
+
+.wallet .my-card span{
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: whitesmoke;
+}
+
+.wallet .my-card h4{
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.wallet .my-card h5{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.wallet .my-card p{
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* ------------------- Home ------------------------*/
+
+.shortcut-box img{
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+}
+
+.function-box img{
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+}
+
+/* ------------------- Transaction-detail ------------------------*/
+.transaction-detail img{
+    width: 60px;
 }

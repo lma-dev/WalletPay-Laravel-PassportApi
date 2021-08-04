@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +27,17 @@ Route::middleware('auth')->namespace('Frontend')->group(function () {
     Route::get('/profile', 'PageController@profile')->name('profile');
     Route::get('/update-password', 'PageController@updatePassword')->name('update-password');
     Route::post('/update-password', 'PageController@updatePasswordStore')->name('update-password.store');
+
+    Route::get('/wallet', 'PageController@wallet')->name('wallet');
+    Route::get('/transfer', 'PageController@transfer');
+    Route::get('/transfer/confirm', 'PageController@transferConfirm');
+    Route::post('/transfer/complete', 'PageController@transferComplete');
+
+    Route::get('/to-account-verify', 'PageController@toAccountVerify');
+    Route::get('/password-check', 'PageController@passwordCheck');
+
+    Route::get('/transaction', 'PageController@transaction');
+    Route::get('/transaction/{trx_id}', 'PageController@transactionDetail');
 });
 
+?>
