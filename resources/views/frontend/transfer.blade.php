@@ -4,8 +4,10 @@
 <div class="transfer">
     <div class="card">
         <div class="card-body">
-            <form action="{{url('transfer/confirm')}}" method="GET" autocomplete="off">
+            @include('frontend.layouts.flash')
+            <form action="{{url('transfer/confirm')}}" method="GET" autocomplete="off" id="transfer-form">
 
+                <input type="hidden" name="hash_value" class="hash_value" value="">
                 <div class="form-group">
                     <label for="">From</label>
                     <p class="mb-1 text-muted">{{ $authUser->name }}</p>
@@ -30,7 +32,7 @@
 
                 <div class="form-group">
                     <label for="">Amount (MMK)</label></label>
-                <input type="number" name="amount" class="form-control" value={{old('amount')}}>
+                <input type="number" name="amount" class="form-control amount" value={{old('amount')}}>
                 @error('amount')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -39,9 +41,9 @@
                 </div>
                 <div class="form-group">
                     <label for="">Description</label></label>
-                <textarea name="description" class="form-control"></textarea>
+                <textarea name="description" class="form-control description">{{old('description')}}</textarea>
                 </div>
-                <button type="submit" class="btn btn-theme btn-block mt-4">Continue</button>
+                <button type="submit" class="btn btn-theme btn-block mt-4 submit-btn">Continue</button>
             </form>
         </div>
     </div>
@@ -65,8 +67,24 @@
                  }
               });
         });
+        $('.submit-btn').on('click',function(e){
+            e.preventDefault();
+
+            var to_phone=$('.to_phone').val();
+            var amount=$('.amount').val();
+            var description=$('.description').val();
+
+            $.ajax({
+                    url : `/transfer-hash?to_phone=${to_phone}&amount=${amount}&description=${description}`,
+                    type : 'GET',
+                    success : function(res){
+                        if(res.status=='success'){
+                            $('.hash_value').val(res.data);
+                            $('#transfer-form').submit();
+                        }
+                    }
+                 });
+            });
     });
 </script>
-
-
 @endsection

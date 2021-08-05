@@ -38,6 +38,9 @@ Route::middleware('auth')->namespace('Frontend')->group(function () {
 
     Route::get('/transaction', 'PageController@transaction');
     Route::get('/transaction/{trx_id}', 'PageController@transactionDetail');
+    Route::get('/transfer-hash', 'PageController@transferHash');
+
+    Route::get('/receive-qr', 'PageController@receiveQR');
 });
 
 ?>

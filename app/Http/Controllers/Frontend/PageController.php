@@ -54,49 +54,78 @@ class PageController extends Controller
     }
 
     public function transferConfirm(TransferFormValidate $request){
-        if($request->amount <1000){
+
+        $authUser = Auth()->guard('web')->user();
+        $from_account=$authUser;
+        $to_phone = $request->to_phone;
+        $amount = $request->amount;
+        $description = $request->description;
+        $hash_value=$request->hash_value;
+        $str= $to_phone.$amount.$description;
+        $hash_value2= hash_hmac('sha256', $str , 'walletpay!@#');
+
+        if ($hash_value!==$hash_value2) {
+            return back()->withErrors(['amount' => 'The given data is invalid.'])->withInput();
+        }
+
+        if($amount <1000){
             return back()->withErrors(['amount' => 'The amount must be at least 1000 MMK.'])->withInput();
         }
-        $authUser = Auth()->guard('web')->user();
+
         $to_account = User::where('phone' , $request->to_phone)->first();
         if(!$to_account){
             return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
         }
 
-        if($authUser->phone==$request->to_phone){
+        if($from_account->phone==$to_phone){
             return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
         }
 
-        $from_account=$authUser;
-        $to_phone = $request->to_phone;
-        $amount = $request->amount;
-        $description = $request->description;
-        return view('frontend.transfer_confirm' , compact('from_account' , 'to_account','amount','description'));
+        if(!$from_account->wallet || !$to_account->wallet){
+            return back()->withErrors(['to_phone' => 'The given data is invalid'])->withInput();
+        }
+
+        if($from_account->wallet->amount < $amount){
+            return back()->withErrors(['amount' => 'The amount is not enough'])->withInput();
+        }
+
+        return view('frontend.transfer_confirm' , compact('from_account' , 'to_account','amount','description','hash_value'));
     }
 
     public function transferComplete(TransferFormValidate $request){
 
         $authUser = Auth()->guard('web')->user();
-        $to_account = User::where('phone' , $request->to_phone)->first();
-
-        if($request->amount <1000){
-            return back()->withErrors(['amount' => 'The amount must be at least 1000 MMK.'])->withInput();
-        }
-        if(!$to_account){
-            return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
-        }
-
-        if($authUser->phone==$request->to_phone){
-            return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
-        }
-
         $from_account=$authUser;
         $to_phone = $request->to_phone;
         $amount = $request->amount;
         $description = $request->description;
+        $hash_value=$request->hash_value;
+        $str= $to_phone.$amount.$description;
+        $hash_value2= hash_hmac('sha256', $str , 'walletpay!@#');
+
+        if ($hash_value!==$hash_value2) {
+            return back()->withErrors(['amount' => 'The given data is invalid.'])->withInput();
+        }
+
+        if($amount <1000){
+            return back()->withErrors(['amount' => 'The amount must be at least 1000 MMK.'])->withInput();
+        }
+
+        $to_account = User::where('phone' , $request->to_phone)->first();
+        if(!$to_account){
+            return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
+        }
+
+        if($from_account->phone==$to_phone){
+            return back()->withErrors(['to_phone' => '(To) Account is Invalid'])->withInput();
+        }
 
         if(!$from_account->wallet || !$to_account->wallet){
-            return back()->withErrors(['to_phone' => 'Something wrong.The given data is invalid'])->withInput();
+            return back()->withErrors(['to_phone' => 'The given data is invalid'])->withInput();
+        }
+
+        if($from_account->wallet->amount < $amount){
+            return back()->withErrors(['amount' => 'The amount is not enough'])->withInput();
         }
 
         DB::beginTransaction();
@@ -194,5 +223,19 @@ class PageController extends Controller
             'status' => 'fail',
             'message' => 'The password is incorrect',
         ]);
+    }
+
+    public function transferHash(Request $request){
+       $str= $request->to_phone.$request->amount.$request->description;
+       $hash_value= hash_hmac('sha256', $str , 'walletpay!@#');
+       return response()->json([
+        'status' => 'success',
+        'data' => $hash_value,
+         ]);
+    }
+
+    public function receiveQR(){
+        $authUser= auth()->guard('web')->user();
+        return view('frontend.receive_qr',compact('authUser'));
     }
 }

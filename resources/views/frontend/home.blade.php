@@ -22,7 +22,9 @@
                 <div class="card shortcut-box mb-3">
                     <div class="card-body p-3">
                        <img src="{{ asset('img/qr-code.png') }}" alt="">
-                       <span>Receive QR</span>
+                        <a href="{{url('receive-qr')}}">
+                            <span>Receive QR</span>
+                        </a>
                     </div>
                 </div>
             </div>
