@@ -14,7 +14,9 @@
             <div class="card shortcut-box mb-3">
                 <div class="card-body p-3">
                    <img src="{{ asset('img/qr-code-scan.png') }}" alt="">
-                   <span>Scan & Pay</span>
+                   <a href="{{url('scan-and-pay')}}">
+                    <span>Scan and Pay</span>
+                </a>
                 </div>
             </div>
         </div>
