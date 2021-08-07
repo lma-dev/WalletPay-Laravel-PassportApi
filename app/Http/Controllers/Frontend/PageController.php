@@ -16,7 +16,12 @@ use App\Http\Requests\TransferFormValidate;
 class PageController extends Controller
 {
    public function home(){
-       $user = Auth::guard('web')->user();
+        $user = Auth::guard('web')->user();
+        $title='';
+        $message='';
+        $sourceable_id='';
+        $sourceable_type='';
+        $web_link='';
     return view('frontend.home' , compact('user'));
    }
    public function profile(){
