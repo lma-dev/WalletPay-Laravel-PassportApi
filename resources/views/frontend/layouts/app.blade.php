@@ -51,8 +51,8 @@
                                 <h3>@yield('title')</h3>
                         </div>
                         <div class="col-2 text-center">
-                            <a href="">
-                                <i class="fas fa-bell"></i>
+                            <a href="{{url('/notification')}}">
+                                <i class="fas fa-bell"></i><span class="badge badge-pill badge-danger unread_noti_count">{{$unread_noti_count}}</span>
                             </a>
                         </div>
                     </div>

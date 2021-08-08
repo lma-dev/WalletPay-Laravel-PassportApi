@@ -237,9 +237,6 @@ text-decoration: none;
 
 
 /* ------------------- Wallet ------------------------*/
-.wallet{
-
-}
 
 .wallet .my-card{
     background-color: #5842E3;
@@ -286,4 +283,12 @@ text-decoration: none;
 /* ------------------- Transaction-detail ------------------------*/
 .transaction-detail img{
     width: 60px;
+}
+
+/* ------------------- unread_noti_count ------------------------*/
+.unread_noti_count{
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    padding: 3px;
 }

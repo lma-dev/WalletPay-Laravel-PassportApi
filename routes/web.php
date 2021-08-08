@@ -46,6 +46,10 @@ Route::middleware('auth')->namespace('Frontend')->group(function () {
     Route::get('/scan-and-pay-form', 'PageController@scanAndPayForm');
     Route::get('/scan-and-pay/confirm', 'PageController@scanAndPayConfirm');
     Route::post('/scan-and-pay/complete', 'PageController@scanAndPayComplete');
+
+    Route::get('/notification', 'NotificationController@index');
+    Route::get('/notification/{id}', 'NotificationController@show');
+
 });
 
 ?>

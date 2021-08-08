@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label for="">Old Password</label>
-                    <input type="password" name="old_password" class="form-control @error('old_password') is-invalid @enderror" value="{{'old_password'}}">
+                    <input type="password" name="old_password" class="form-control @error('old_password') is-invalid @enderror" value="{{old('old_password')}}">
                     @error('old_password')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">New Password</label>
-                    <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" value="{{'new_password'}}">
+                    <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" value="{{old('new_password')}}">
                     @error('new_password')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

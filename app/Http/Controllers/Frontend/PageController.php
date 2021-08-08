@@ -11,17 +11,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UpdatePassword;
+use App\Notifications\GeneralNotification;
 use App\Http\Requests\TransferFormValidate;
+use Illuminate\Support\Facades\Notification;
 
 class PageController extends Controller
 {
    public function home(){
-        $user = Auth::guard('web')->user();
-        $title='';
-        $message='';
-        $sourceable_id='';
-        $sourceable_type='';
-        $web_link='';
+    $user = Auth::guard('web')->user();
     return view('frontend.home' , compact('user'));
    }
    public function profile(){
@@ -41,6 +38,13 @@ class PageController extends Controller
     if (Hash::check( $old_password, $user->password)) {
         $user->password = Hash::make($new_password);
         $user->update();
+
+        $title='Changed Password!';
+        $message='Your paccount password is successfully changed';
+        $sourceable_id=$user->id;
+        $sourceable_type=User::class;
+        $web_link=url('profile');
+        Notification::send([$user], new GeneralNotification($title,$message,$sourceable_id,$sourceable_type,$web_link));
 
       return redirect()->route('profile')->with('update' , 'Successfully Updated.');
     }
@@ -163,6 +167,22 @@ class PageController extends Controller
             $to_account_transaction->source_id = $from_account->id;
             $to_account_transaction->description = $description;
             $to_account_transaction->save();
+
+            //From noti
+            $title='E-money Transfered';
+            $message='Your e-money transfered '.number_format($amount).' MMK to'.$to_account->name.' ('. $to_account->phone.')';
+            $sourceable_id=$from_account_transaction->id;
+            $sourceable_type=Transaction::class;
+            $web_link=url('/transaction/'.$from_account_transaction->trx_id);
+            Notification::send([$from_account], new GeneralNotification($title,$message,$sourceable_id,$sourceable_type,$web_link));
+
+            //To noti
+            $title='E-money Received';
+            $message='Your wallet received '.number_format($amount).' MMK to'.$from_account->name.' ('. $from_account->phone.')';
+            $sourceable_id=$to_account_transaction->id;
+            $sourceable_type=User::class;
+            $web_link=url('/transaction/'.$to_account_transaction->trx_id);
+            Notification::send([$to_account], new GeneralNotification($title,$message,$sourceable_id,$sourceable_type,$web_link));
 
 
             DB::commit();
@@ -363,6 +383,21 @@ class PageController extends Controller
             $to_account_transaction->description = $description;
             $to_account_transaction->save();
 
+            //From noti
+            $title='E-money Transfered';
+            $message='Your e-money transfered '.number_format($amount).' MMK to'.$to_account->name.' ('. $to_account->phone.')';
+            $sourceable_id=$from_account_transaction->id;
+            $sourceable_type=Transaction::class;
+            $web_link=url('/transaction/'.$from_account_transaction->trx_id);
+            Notification::send([$from_account], new GeneralNotification($title,$message,$sourceable_id,$sourceable_type,$web_link));
+
+            //To noti
+            $title='E-money Received';
+            $message='Your wallet received '.number_format($amount).' MMK to'.$from_account->name.' ('. $from_account->phone.')';
+            $sourceable_id=$to_account_transaction->id;
+            $sourceable_type=User::class;
+            $web_link=url('/transaction/'.$to_account_transaction->trx_id);
+            Notification::send([$to_account], new GeneralNotification($title,$message,$sourceable_id,$sourceable_type,$web_link));
 
             DB::commit();
             return redirect('/transaction/'.$from_account_transaction->trx_id)->with('transfer_success' , 'Successfully transfered.');
