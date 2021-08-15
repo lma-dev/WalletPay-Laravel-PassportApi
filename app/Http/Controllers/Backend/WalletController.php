@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\User;
 use App\Wallet;
 use Carbon\Carbon;
+use App\Transaction;
+use App\Helpers\UUIDGenerate;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
@@ -38,5 +44,96 @@ class WalletController extends Controller
             ->make(true);
     }
 
+    public function addAmount(){
+        $users = User::orderBy("name")->get();
+        return view('backend.wallet.add_amount',compact('users'));
+    }
 
+    public function addAmountStore(Request $request){
+        $request->validate(
+            [
+            'user_id' => 'required',
+            'amount' => 'required|integer',
+            ],
+            [
+                'user_id.required' => 'THe user field is required.',
+            ]
+        );
+        if($request->amount<1000){
+            return back()->withErrors(['amount' => 'The amount must be at least 1000 MMK.'])->withInput();
+        }
+
+        DB::beginTransaction();
+        try {
+        $to_account= User::with('wallet')->where('id',$request->user_id)->firstOrFail();
+        $to_account_wallet = $to_account->wallet;
+        $to_account_wallet->increment('amount', $request->amount);
+        $to_account_wallet->update();
+
+        $ref_no = UUIDGenerate::refNumber();
+        $to_account_transaction = new Transaction();
+        $to_account_transaction->ref_no = $ref_no;
+        $to_account_transaction->trx_id = UUIDGenerate::trxId();
+        $to_account_transaction->user_id = $to_account->id;
+        $to_account_transaction->type = 1;
+        $to_account_transaction->amount = $request->amount;
+        $to_account_transaction->source_id = 0;
+        $to_account_transaction->description = $request->description;
+        $to_account_transaction->save();
+            DB::commit();
+            return redirect()->route('admin.wallet.index')->with('create' , 'Successfully added amount.');
+        } catch (\Exception $error) {
+            DB::rollBack();
+            return back()->withErrors(['fail' => 'something wrong' , $error->getMessage()])->withInput();
+        }
+    }
+
+    public function reduceAmount(){
+        $users = User::orderBy("name")->get();
+        return view('backend.wallet.reduce_amount',compact('users'));
+    }
+
+    public function reduceAmountStore(Request $request){
+        $request->validate(
+            [
+            'user_id' => 'required',
+            'amount' => 'required|integer',
+            ],
+            [
+                'user_id.required' => 'THe user field is required.',
+            ]
+        );
+        if($request->amount<1){
+            return back()->withErrors(['amount' => 'The amount must be at least 1 MMK.'])->withInput();
+        }
+
+        DB::beginTransaction();
+        try {
+            $to_account= User::with('wallet')->where('id',$request->user_id)->firstOrFail();
+            $to_account_wallet = $to_account->wallet;
+
+            if($to_account_wallet->amount <$request ->amount){
+            throw new Exception("The amount is greater than the wallet balance.");
+
+            }
+            $to_account_wallet->decrement('amount', $request->amount);
+            $to_account_wallet->update();
+
+            $ref_no = UUIDGenerate::refNumber();
+            $to_account_transaction = new Transaction();
+            $to_account_transaction->ref_no = $ref_no;
+            $to_account_transaction->trx_id = UUIDGenerate::trxId();
+            $to_account_transaction->user_id = $to_account->id;
+            $to_account_transaction->type = 2;
+            $to_account_transaction->amount = $request->amount;
+            $to_account_transaction->source_id = 0;
+            $to_account_transaction->description = $request->description;
+            $to_account_transaction->save();
+                DB::commit();
+                return redirect()->route('admin.wallet.index')->with('create' , 'Successfully reduced amount.');
+        } catch (\Exception $error) {
+            DB::rollBack();
+            return back()->withErrors(['fail' => 'something wrong' , $error->getMessage()])->withInput();
+        }
+    }
 }

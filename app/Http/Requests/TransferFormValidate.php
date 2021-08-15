@@ -26,11 +26,13 @@ class TransferFormValidate extends FormRequest
         return [
             'to_phone' => 'required|min:11|max:11' ,
             'amount' => 'required|integer',
+            'hash_value' =>'required'
 
         ];
     }
         public function messages(){
             return [
+                'hash_value.required' => 'The given data is invalid',
                 'to_phone.min' => 'Phone Number is not valid',
                 'to_phone.max' => 'Phone Number is not valid',
                 'to_phone.required' => 'Please Fill the to account Information',

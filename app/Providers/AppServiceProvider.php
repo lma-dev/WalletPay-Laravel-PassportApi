@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
             if(auth()->guard('web')->check()){
                $unread_noti_count= auth()->guard('web')->user()->unreadNotifications()->count();
             }
-            $view->with('unread_noti_count',$unread_noti_count);
+            $view->with(['unread_noti_count'=> $unread_noti_count]);
         });
     }
 }

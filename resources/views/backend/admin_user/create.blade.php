@@ -39,7 +39,7 @@
 
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-secondary mr-2 back-btn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confrim</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
                 </div>
             </form>
         </div>

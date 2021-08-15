@@ -13,7 +13,10 @@
         </div>
       </div>
 </div>
-
+<div class="pt-3">
+ <a href="{{url('admin/wallet/add/amount')}}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add amount</a>
+ <a href="{{url('admin/wallet/reduce/amount')}}" class="btn btn-danger"><i class="fas fa-minus-circle"></i> Reduce Amount</a>
+</div>
 <div class="content py-3">
     <div class="card">
         <div class="card-body">
